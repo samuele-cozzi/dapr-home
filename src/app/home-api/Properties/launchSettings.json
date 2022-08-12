@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "thermostat_api": {
+    "home_api": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

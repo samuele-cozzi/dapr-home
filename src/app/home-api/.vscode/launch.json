@@ -6,7 +6,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/bin/Debug/net6.0/thermostat-api.dll",
+            "program": "${workspaceFolder}/bin/Debug/net6.0/home-api.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
@@ -32,7 +32,7 @@
             "request": "launch",
             "preLaunchTask": "docker-run: debug",
             "netCore": {
-                "appProject": "${workspaceFolder}/thermostat-api.csproj"
+                "appProject": "${workspaceFolder}/home-api.csproj"
             }
         }
     ]

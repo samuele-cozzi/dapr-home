@@ -1,4 +1,4 @@
-namespace thermostat.api.config;
+namespace home.api.config;
 
 public class DaprSettings
 {

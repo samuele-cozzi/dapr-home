@@ -16,5 +16,5 @@ global using Serilog;
 global using Dapr;
 global using Dapr.Client; 
 
-global using thermostat.api.models;
-global using thermostat.api.config;
+global using home.api.models;
+global using home.api.config;

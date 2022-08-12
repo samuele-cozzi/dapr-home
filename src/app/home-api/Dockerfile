@@ -6,16 +6,16 @@ ENV ASPNETCORE_URLS=http://+:80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0-focal AS build
 WORKDIR /src
-COPY ["thermostat-api.csproj", "./"]
-RUN dotnet restore "thermostat-api.csproj"
+COPY ["home-api.csproj", "./"]
+RUN dotnet restore "home-api.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "thermostat-api.csproj" -c Release -o /app/build
+RUN dotnet build "home-api.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "thermostat-api.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "home-api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "thermostat-api.dll"]
+ENTRYPOINT ["dotnet", "home-api.dll"]

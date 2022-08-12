@@ -1,4 +1,4 @@
-namespace thermostat.api.models;
+namespace home.api.models;
 
 public class HomeState {
     public int temperature { get; set; }
