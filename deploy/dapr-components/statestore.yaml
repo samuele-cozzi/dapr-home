@@ -1,0 +1,14 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: state-home
+spec:
+  type: state.azure.blobstorage
+  version: v1
+  metadata:
+  - name: accountName
+    value: "storagethermostat"
+  - name: accountKey
+    value: "JFX6V87XVseMLtJ8FzT+4B8EjiKlGq7WsKa5A1PvCC9zg73SD0gF3fNN93nTH4uHs73vOFAZmoX9+AStkk/geg=="
+  - name: containerName
+    value: "data-home"
