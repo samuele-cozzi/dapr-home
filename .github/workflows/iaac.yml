@@ -28,13 +28,15 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Create resource group
+      id: create-resourcegroup
       uses: azure/CLI@v1
       with:
         inlineScript: >
           echo "Creating resource group in Azure"
           #echo "Executing 'az group create -l ${{ env.REGION }} -n ${{ env.RESOURCE_GROUP_NAME }}'"
-          az group create -n smarthome -l westeurope
-          # az group create -n ${{ env.RESOURCE_GROUP_NAME }} -l ${{ env.REGION }}
+          az group create -n ${{ env.RESOURCE_GROUP_NAME }} -l ${{ env.REGION }}
+    
+
     - name: Creating resources
       uses: azure/CLI@v1
       with:
