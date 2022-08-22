@@ -21,7 +21,7 @@ env:
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
   # docker context
-  DOCKER_CONTEXT : ./src/app/thermostat-api
+  # DOCKER_CONTEXT : ./src/app/thermostat-api
 
 
 jobs:
