@@ -36,6 +36,7 @@ jobs:
           #echo "Executing 'az group create -l ${{ env.REGION }} -n ${{ env.RESOURCE_GROUP_NAME }}'"
           az group create -n ${{ env.RESOURCE_GROUP_NAME }} -l ${{ env.REGION }}
     
+    
 
     - name: Creating resources
       uses: azure/CLI@v1
@@ -47,3 +48,5 @@ jobs:
             --template-file '/github/workspace/deploy/azure/main.bicep' \
             --parameters registryName='docker.io' registryUserName='${{ secrets.DOCKER_HUB_USERNAME }}' registryPassword='${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}'\
             --debug
+
+    - run: echo ${{ steps.deploy.outputs }}
