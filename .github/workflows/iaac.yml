@@ -11,7 +11,7 @@ env:
   RESOURCE_GROUP_NAME: smarthome
 
   # specify your preferred region
-  REGION: "'West Europe'"
+  REGION: westeurope
 
 jobs:
   provision:
@@ -32,15 +32,8 @@ jobs:
       with:
         inlineScript: >
           echo "Creating resource group in Azure"
-          #!/bin/bash
-          if $(az group exists --name ${{ env.RESOURCE_GROUP_NAME }}) ; then
-            echo "Azure resource group already exists, skipping creation..."
-          else
-            az group create --name ${{ env.RESOURCE_GROUP_NAME }} --location ${{ env.REGION }}
-            echo "Azure resource group created"
-          fi 
           #echo "Executing 'az group create -l ${{ env.REGION }} -n ${{ env.RESOURCE_GROUP_NAME }}'"
-          #az group create -l ${{ env.REGION }} -n ${{ env.RESOURCE_GROUP_NAME }}
+          az group create -n ${{ env.RESOURCE_GROUP_NAME }} -l ${{ env.REGION }} 
     - name: Creating resources
       uses: azure/CLI@v1
       with:
