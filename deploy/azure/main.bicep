@@ -20,6 +20,10 @@ module env 'environment.bicep' = {
   }
 }
 
+param registryName string = ''
+param registryUserName string = ''
+param registryPassword string = ''
+
 // create the various config pairs
 var shared_config = [
   {
@@ -36,20 +40,21 @@ var shared_config = [
   }
 ]
 
-// // create the products api container app
-// module products 'container_app.bicep' = {
-//   name: 'products'
-//   params: {
-//     name: 'products'
-//     location: location
-//     registryPassword: acr.listCredentials().passwords[0].value
-//     registryUsername: acr.listCredentials().username
-//     containerAppEnvironmentId: env.outputs.id
-//     registry: acr.name
-//     envVars: shared_config
-//     externalIngress: false
-//   }
-// }
+// create the home api container app
+module home 'container_app.bicep' = {
+  name: 'home-api'
+  params: {
+    name: 'home-api'
+    location: location
+    registry: registryName
+    registryUsername: registryUserName
+    registryPassword: registryPassword
+    repositoryImage: 'docker.io/samuelecozzi/thermostat-consumer:latest'
+    containerAppEnvironmentId: env.outputs.id
+    envVars: shared_config
+    externalIngress: false
+  }
+}
 
 // // create the inventory api container app
 // module inventory 'container_app.bicep' = {
