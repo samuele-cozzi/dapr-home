@@ -21,7 +21,7 @@ env:
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
   # docker context
-  # DOCKER_CONTEXT : ./src/app/thermostat-api
+  DOCKER_CONTEXT: ./src/app/thermostat-api
 
 
 jobs:
@@ -76,7 +76,7 @@ jobs:
         id: build-and-push
         uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
         with:
-          context: ./src/app/thermostat-api
+          context: ${{ env.DOCKER_CONTEXT }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           labels: ${{ steps.meta.outputs.labels }}
