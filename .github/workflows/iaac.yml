@@ -38,8 +38,8 @@ jobs:
       id: create-resourcegroup
       uses: azure/CLI@v1
       with:
-        inlineScript: >
-          echo "Creating resource group in Azure..."
+        inlineScript: |
+          #echo "Creating resource group in Azure..."
           #echo "Executing 'az group create -l ${{ env.REGION }} -n ${{ env.RESOURCE_GROUP_NAME }}'"
           az group create -n ${{ env.RESOURCE_GROUP_NAME }} -l ${{ env.REGION }}
           echo "Creating in progress..."
@@ -55,7 +55,7 @@ jobs:
     - name: Creating resources
       uses: azure/CLI@v1
       with:
-        inlineScript: >
+        inlineScript: |
           echo "Creating resources"
           az deployment group create \
             --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
