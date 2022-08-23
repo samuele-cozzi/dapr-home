@@ -1,28 +1,25 @@
 param location string = resourceGroup().location
+param registryName string
+param registryUserName string
+@secure()
+param registryPassword string 
 
-// // create the azure container registry
-// resource acr 'Microsoft.ContainerRegistry/registries@2021-09-01' = {
-//   name: toLower('${resourceGroup().name}acr')
-//   location: location
-//   sku: {
-//     name: 'Basic'
-//   }
-//   properties: {
-//     adminUserEnabled: true
-//   }
-// }
+//create iothub
+module iothub 'iothub.bicep' = {
+  name: 'iot-home'
+  params: {
+    name: 'iot-home'
+    location: location
+  }
+}
 
 // create the aca environment
-module env 'environment.bicep' = {
+module env 'container_environment.bicep' = {
   name: 'containerAppEnvironment'
   params: {
     location: location
   }
 }
-
-param registryName string = ''
-param registryUserName string = ''
-param registryPassword string = ''
 
 // create the various config pairs
 var shared_config = [
