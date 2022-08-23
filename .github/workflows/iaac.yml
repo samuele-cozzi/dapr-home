@@ -44,7 +44,7 @@ jobs:
           az group create -n ${{ env.RESOURCE_GROUP_NAME }} -l ${{ env.REGION }} --output table
     
     - name: List resource group
-      id: list-resourcegroup
+      id: list-resourcegroup-after
       uses: azure/CLI@v1
       with:
         inlineScript: >
