@@ -11,3 +11,6 @@ resource iothub 'Microsoft.Devices/IotHubs@2020-04-01' = {
       capacity: skuCapacity
   }
 }
+
+// Output our variables
+output connectionstring string = listKeys(iothub.id, iothub.apiVersion).primaryConnectionString

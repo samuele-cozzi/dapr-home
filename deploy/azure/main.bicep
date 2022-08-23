@@ -14,6 +14,25 @@ module iothub 'iothub.bicep' = {
 }
 //manual creation of devices
 
+//create storage account
+module storageaccount 'storage_account.bicep' = {
+  name: 'storageaccount'
+  params: {
+    location: location
+    storageName: 'storage-home'
+    tags: {
+    }
+  }
+}
+
+module function_storagecontainer 'storage_container.bicep' = {
+  name: 'function_storagecontainer'
+  params: {
+    storageName: storageaccount.outputs.storageName
+    containerName: 'functions'
+  }
+}
+
 // create the aca environment
 module env 'container_environment.bicep' = {
   name: 'containerAppEnvironment'
@@ -38,6 +57,30 @@ var shared_config = [
   }
 ]
 
+// create the various config pairs
+var iot_consumer_config = [
+  {
+    name: 'ASPNETCORE_ENVIRONMENT'
+    value: 'Development'
+  }
+  {
+    name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+    value: env.outputs.appInsightsInstrumentationKey
+  }
+  {
+    name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+    value: env.outputs.appInsightsConnectionString
+  }
+  {
+    name: 'AzureWebJobsStorage'
+    value: storageaccount.outputs.connectionstring
+  }
+  {
+    name: 'AzureEventHubConnectionString'
+    value: iothub.outputs.connectionstring
+  }
+]
+
 // create the home api container app
 module home 'container_app.bicep' = {
   name: 'home-api'
@@ -47,39 +90,25 @@ module home 'container_app.bicep' = {
     registry: registryName
     registryUsername: registryUserName
     registryPassword: registryPassword
-    repositoryImage: 'docker.io/samuelecozzi/thermostat-consumer:latest'
+    repositoryImage: '${registryName}/${registryUserName}/home-api:latest'
     containerAppEnvironmentId: env.outputs.id
     envVars: shared_config
     externalIngress: false
   }
 }
 
-// // create the inventory api container app
-// module inventory 'container_app.bicep' = {
-//   name: 'inventory'
-//   params: {
-//     name: 'inventory'
-//     location: location
-//     registryPassword: acr.listCredentials().passwords[0].value
-//     registryUsername: acr.listCredentials().username
-//     containerAppEnvironmentId: env.outputs.id
-//     registry: acr.name
-//     envVars: shared_config
-//     externalIngress: false
-//   }
-// }
-
-// // create the store api container app
-// module store 'container_app.bicep' = {
-//   name: 'store'
-//   params: {
-//     name: 'store'
-//     location: location
-//     registryPassword: acr.listCredentials().passwords[0].value
-//     registryUsername: acr.listCredentials().username
-//     containerAppEnvironmentId: env.outputs.id
-//     registry: acr.name
-//     envVars: shared_config
-//     externalIngress: true
-//   }
-// }
+// create the home api container app
+module iothub_consumer 'container_app.bicep' = {
+  name: 'iothub-functions'
+  params: {
+    name: 'capp-thermostat-consumer'
+    location: location
+    registry: registryName
+    registryUsername: registryUserName
+    registryPassword: registryPassword
+    repositoryImage: '${registryName}/${registryUserName}/thermostat-consumer:latest'
+    containerAppEnvironmentId: env.outputs.id
+    envVars: iot_consumer_config
+    externalIngress: false
+  }
+}
