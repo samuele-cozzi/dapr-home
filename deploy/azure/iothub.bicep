@@ -16,4 +16,4 @@ resource iothub 'Microsoft.Devices/IotHubs@2020-04-01' = {
 
 
 // Output our variables
-output connectionstring string = 'Endpoint=${iothub.properties.eventHubEndpoints};SharedAccessKeyName=${listKeys(iothub.id, iothub.apiVersion).value[0].keyName};SharedAccessKey=${listKeys(iothub.id, iothub.apiVersion).value[0].primaryKey}'
+output connectionstring string = 'Endpoint=${iothub.properties.eventHubEndpoints.events.endpoint};SharedAccessKeyName=${listKeys(iothub.id, iothub.apiVersion).value[0].keyName};SharedAccessKey=${listKeys(iothub.id, iothub.apiVersion).value[0].primaryKey};EntityPath=${iothub.properties.eventHubEndpoints.events.path}'
