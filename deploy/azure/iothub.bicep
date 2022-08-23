@@ -10,7 +10,10 @@ resource iothub 'Microsoft.Devices/IotHubs@2020-04-01' = {
       name: skuName
       capacity: skuCapacity
   }
+
 }
 
+
+
 // Output our variables
-output connectionstring string = listKeys(iothub.id, iothub.apiVersion).primaryConnectionString
+output connectionstring string = 'HostName=${iothub.name}.azure-devices.net;SharedAccessKeyName=${listKeys(iothub.id, iothub.apiVersion).value[0].keyName};SharedAccessKey=${listKeys(iothub.id, iothub.apiVersion).value[0].primaryKey}'
