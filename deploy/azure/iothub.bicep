@@ -16,4 +16,4 @@ resource iothub 'Microsoft.Devices/IotHubs@2020-04-01' = {
 
 
 // Output our variables
-output connectionstring string = 'HostName=${iothub.name}.azure-devices.net;SharedAccessKeyName=${listKeys(iothub.id, iothub.apiVersion).value[0].keyName};SharedAccessKey=${listKeys(iothub.id, iothub.apiVersion).value[0].primaryKey}'
+output connectionstring string = 'Endpoint=sb://${iothub.properties.eventHubEndpoints}.servicebus.windows.net;SharedAccessKeyName=${listKeys(iothub.id, iothub.apiVersion).value[0].keyName};SharedAccessKey=${listKeys(iothub.id, iothub.apiVersion).value[0].primaryKey}'
