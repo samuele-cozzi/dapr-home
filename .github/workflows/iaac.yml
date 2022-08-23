@@ -34,8 +34,6 @@ jobs:
         inlineScript: >
           az group list --output table
 
-    - run: echo ${{ steps.deploy.outputs }}
-
     - name: Create resource group
       id: create-resourcegroup
       uses: azure/CLI@v1
@@ -43,9 +41,14 @@ jobs:
         inlineScript: >
           echo "Creating resource group in Azure"
           #echo "Executing 'az group create -l ${{ env.REGION }} -n ${{ env.RESOURCE_GROUP_NAME }}'"
-          az group create -n ${{ env.RESOURCE_GROUP_NAME }} -l ${{ env.REGION }}
+          az group create -n ${{ env.RESOURCE_GROUP_NAME }} -l ${{ env.REGION }} --output table
     
-    - run: echo ${{ steps.deploy.outputs }}
+    - name: List resource group
+      id: list-resourcegroup
+      uses: azure/CLI@v1
+      with:
+        inlineScript: >
+          az group list --output table
 
     - name: Creating resources
       uses: azure/CLI@v1
@@ -57,5 +60,3 @@ jobs:
             --template-file '/github/workspace/deploy/azure/main.bicep' \
             --parameters registryName='docker.io' registryUserName='${{ secrets.DOCKER_HUB_USERNAME }}' registryPassword='${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}'\
             --debug
-
-    - run: echo ${{ steps.deploy.outputs }}
