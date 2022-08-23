@@ -26,6 +26,15 @@ jobs:
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    - name: List resource group
+      id: list-resourcegroup
+      uses: azure/CLI@v1
+      with:
+        inlineScript: >
+          az group list --output table
+
+    - run: echo ${{ steps.deploy.outputs }}
 
     - name: Create resource group
       id: create-resourcegroup
@@ -36,7 +45,7 @@ jobs:
           #echo "Executing 'az group create -l ${{ env.REGION }} -n ${{ env.RESOURCE_GROUP_NAME }}'"
           az group create -n ${{ env.RESOURCE_GROUP_NAME }} -l ${{ env.REGION }}
     
-    
+    - run: echo ${{ steps.deploy.outputs }}
 
     - name: Creating resources
       uses: azure/CLI@v1
