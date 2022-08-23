@@ -8,10 +8,11 @@ param registryPassword string
 module iothub 'iothub.bicep' = {
   name: 'iot-home'
   params: {
-    name: 'iot-home'
+    name: 'iot-smarthome-samuele'
     location: location
   }
 }
+//manual creation of devices
 
 // create the aca environment
 module env 'container_environment.bicep' = {
@@ -41,7 +42,7 @@ var shared_config = [
 module home 'container_app.bicep' = {
   name: 'home-api'
   params: {
-    name: 'home-api'
+    name: 'capp-home-api'
     location: location
     registry: registryName
     registryUsername: registryUserName

@@ -1,4 +1,4 @@
-name: Create Container App silo
+name: Provisioning IaaC for SmartHome
 
 on:
   push:
