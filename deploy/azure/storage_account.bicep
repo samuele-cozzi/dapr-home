@@ -33,7 +33,7 @@ resource storage 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   }
   kind: 'StorageV2'
   properties: {
-    accessTier: 'Hot'
+    accessTier: 'Cool'
     allowBlobPublicAccess: false
     allowCrossTenantReplication: false
     allowSharedKeyAccess: true
@@ -67,8 +67,11 @@ resource storage 'Microsoft.Storage/storageAccounts@2021-04-01' = {
     largeFileSharesState: 'Disabled'
     minimumTlsVersion: 'TLS1_2'
     networkAcls: {
+      resourceAccessRules: []
       bypass: 'AzureServices'
-      defaultAction: 'Deny'
+      virtualNetworkRules: []
+      ipRules: []
+      defaultAction: 'Allow'
     }
     supportsHttpsTrafficOnly: true
   }
