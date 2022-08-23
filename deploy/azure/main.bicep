@@ -19,7 +19,7 @@ module storageaccount 'storage_account.bicep' = {
   name: 'storageaccount'
   params: {
     location: location
-    storageName: 'storage-home'
+    storageName: 'storagesmarthome'
     tags: {
     }
   }
