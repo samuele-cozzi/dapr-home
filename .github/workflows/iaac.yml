@@ -41,7 +41,9 @@ jobs:
         inlineScript: >
           echo "Creating resource group in Azure"
           #echo "Executing 'az group create -l ${{ env.REGION }} -n ${{ env.RESOURCE_GROUP_NAME }}'"
-          az group create -n ${{ env.RESOURCE_GROUP_NAME }} -l ${{ env.REGION }} --output table
+          az group create -n ${{ env.RESOURCE_GROUP_NAME }} -l ${{ env.REGION }}
+          echo "Creating in progress..."
+          az group wait --created  --resource-group ${{ env.RESOURCE_GROUP_NAME }}
     
     - name: List resource group
       id: list-resourcegroup-after
