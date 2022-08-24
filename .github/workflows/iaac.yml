@@ -217,5 +217,5 @@ jobs:
           az deployment group create \
             --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
             --template-file '/github/workspace/deploy/azure/main.bicep' \
-            --parameters registryName='docker.io' registryUserName='${{ secrets.DOCKER_HUB_USERNAME }}' registryPassword='${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}' tag='${{ env.RELEASE_VERSION }}'' \
+            --parameters registryName='docker.io' registryUserName='${{ secrets.DOCKER_HUB_USERNAME }}' registryPassword='${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}' tag='${{ env.RELEASE_VERSION }}' \
             --debug
