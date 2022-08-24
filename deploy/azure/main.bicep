@@ -1,6 +1,7 @@
 param location string = resourceGroup().location
 param registryName string
 param registryUserName string
+param tag string
 @secure()
 param registryPassword string 
 
@@ -101,7 +102,7 @@ module home 'container_app.bicep' = {
     registry: registryName
     registryUsername: registryUserName
     registryPassword: registryPassword
-    repositoryImage: '${registryName}/${registryUserName}/home-api:latest'
+    repositoryImage: '${registryName}/${registryUserName}/home-api:${tag}'
     containerAppEnvironmentId: env.outputs.id
     envVars: shared_config
     externalIngress: false
@@ -117,7 +118,7 @@ module iothub_consumer 'container_app.bicep' = {
     registry: registryName
     registryUsername: registryUserName
     registryPassword: registryPassword
-    repositoryImage: '${registryName}/${registryUserName}/thermostat-consumer:latest'
+    repositoryImage: '${registryName}/${registryUserName}/thermostat-consumer:${tag}'
     containerAppEnvironmentId: env.outputs.id
     envVars: iot_consumer_config
     externalIngress: false

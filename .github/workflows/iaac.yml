@@ -4,7 +4,7 @@ on:
   #schedule:
   #  - cron: '26 17 * * *'
   push:
-    branches: [ "main" ]
+    # branches: [ "main" ]
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
   pull_request:
@@ -176,6 +176,9 @@ jobs:
     - name: Checkout to the branch
       uses: actions/checkout@v2
 
+    - name: SetEnv
+      run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
     - name: Azure Login
       uses: azure/login@v1
       with:
@@ -214,5 +217,5 @@ jobs:
           az deployment group create \
             --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
             --template-file '/github/workspace/deploy/azure/main.bicep' \
-            --parameters registryName='docker.io' registryUserName='${{ secrets.DOCKER_HUB_USERNAME }}' registryPassword='${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}' \
+            --parameters registryName='docker.io' registryUserName='${{ secrets.DOCKER_HUB_USERNAME }}' registryPassword='${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}' tag='${{ env.RELEASE_VERSION }}'' \
             --debug
