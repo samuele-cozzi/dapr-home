@@ -3,6 +3,7 @@ module.exports = function (context, IoTHubMessages) {
     
     IoTHubMessages.forEach(message => {
         context.log(`Processed message: ${message}`);
+        context.bindings.output = { body: message };
     });
 
     context.done();

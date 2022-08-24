@@ -23,7 +23,7 @@ if (app.Environment.IsDevelopment())
 app.MapHealthChecks("/");
 app.UseCloudEvents();
 
-app.MapGet("/api/home", async (IOptions<DaprSettings> daprSettings) =>
+app.MapGet("/home", async (IOptions<DaprSettings> daprSettings) =>
 {
     var daprClient = new DaprClientBuilder().Build();
     var result = await daprClient.GetStateAsync<HomeState>(
@@ -33,7 +33,7 @@ app.MapGet("/api/home", async (IOptions<DaprSettings> daprSettings) =>
 })
 .WithName("GetHome");
 
-app.MapPost("api/home", async (HomeState home,IOptions<DaprSettings> daprSettings, ILoggerFactory loggerFactory) =>
+app.MapPost("/home", async (HomeState home,IOptions<DaprSettings> daprSettings, ILoggerFactory loggerFactory) =>
 {
     var logger = loggerFactory.CreateLogger("Start");
     logger.LogInformation(JsonSerializer.Serialize(home));

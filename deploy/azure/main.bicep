@@ -33,11 +33,22 @@ module function_storagecontainer 'storage_container.bicep' = {
   }
 }
 
+module state_storagecontainer 'storage_container.bicep' = {
+  name: 'state_storagecontainer'
+  params: {
+    storageName: storageaccount.outputs.storageName
+    containerName: 'state'
+  }
+}
+
 // create the aca environment
 module env 'container_environment.bicep' = {
   name: 'containerAppEnvironment'
   params: {
     location: location
+    storageName: storageaccount.outputs.storageName
+    storageContainerName: state_storagecontainer.outputs.name
+    storageKey: storageaccount.outputs.accountKey
   }
 }
 

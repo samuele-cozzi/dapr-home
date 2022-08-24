@@ -11,11 +11,13 @@ param externalIngress bool = false
 param allowInsecure bool = true
 param transport string = 'http'
 param appProtocol string = 'http'
+param cpu string = '0.5'
+param memory string = '1.0Gi'
 param registryUsername string
 @secure()
 param registryPassword string
 
-resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' ={
+resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
   name: name
   location: location
   properties:{
@@ -54,12 +56,17 @@ resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' ={
           image: repositoryImage
           name: name
           env: envVars
+          resources: {
+            cpu: json(cpu)
+            memory: memory
+          }
         }
       ]
       scale: {
         minReplicas: minReplicas
         maxReplicas: maxReplicas
       }
+      
     }
   }
 }

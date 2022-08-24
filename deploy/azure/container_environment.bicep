@@ -1,5 +1,8 @@
 param baseName string = resourceGroup().name
 param location string = resourceGroup().location
+param storageName string
+param storageContainerName string
+param storageKey string
 
 resource logs 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
   name: 'logs-${baseName}'
@@ -35,6 +38,38 @@ resource env 'Microsoft.App/managedEnvironments@2022-01-01-preview' = {
         customerId: logs.properties.customerId
         sharedKey: logs.listKeys().primarySharedKey
       }
+    }
+  }
+  resource daprComponent 'daprComponents@2022-03-01' = {
+    name: 'statestore'
+    properties: {
+      componentType: 'state.azure.blobstorage'
+      version: 'v1'
+      ignoreErrors: false
+      initTimeout: '5s'
+      secrets: [
+        {
+          name: 'storageaccountkey'
+          value: storageKey
+        }
+      ]
+      metadata: [
+        {
+          name: 'accountName'
+          value: storageName
+        }
+        {
+          name: 'containerName'
+          value: storageContainerName
+        }
+        {
+          name: 'accountKey'
+          secretRef: 'storageaccountkey'
+        }
+      ]
+      scopes: [
+        'capp-home-api'
+      ]
     }
   }
 }

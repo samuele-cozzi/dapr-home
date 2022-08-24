@@ -78,10 +78,11 @@ resource storage 'Microsoft.Storage/storageAccounts@2021-04-01' = {
 }
 
 // Determine our connection string
-
-var blobStorageConnectionString = 'DefaultEndpointsProtocol=https;AccountName=${storage.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storage.id, storage.apiVersion).keys[0].value}'
+var storageAccountKey = '${listKeys(storage.id, storage.apiVersion).keys[0].value}'
+var blobStorageConnectionString = 'DefaultEndpointsProtocol=https;AccountName=${storage.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccountKey}'
 
 // Output our variable
 output connectionstring string = blobStorageConnectionString
+output accountKey string = storageAccountKey
 output storageId string = storage.id
 output storageName string = storage.name
