@@ -72,10 +72,6 @@ var shared_config = [
 // create the various config pairs
 var iot_consumer_config = [
   {
-    name: 'ASPNETCORE_ENVIRONMENT'
-    value: 'Development'
-  }
-  {
     name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
     value: env.outputs.appInsightsInstrumentationKey
   }
