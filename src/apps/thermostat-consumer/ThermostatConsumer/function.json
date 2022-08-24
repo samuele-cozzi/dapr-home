@@ -9,14 +9,6 @@
       "cardinality": "many",
       "consumerGroup": "$Default",
       "dataType": "string"
-    },
-    {
-      "type": "daprInvoke",
-      "direction": "out",
-      "appId": "capp-home-api",
-      "methodName": "home",
-      "httpVerb": "post",
-      "name": "output"
     }
   ]
 }
