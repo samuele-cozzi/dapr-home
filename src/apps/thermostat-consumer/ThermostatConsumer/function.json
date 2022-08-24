@@ -4,6 +4,7 @@
       "type": "eventHubTrigger",
       "name": "IoTHubMessages",
       "direction": "in",
+      "eventHubName": "",
       "connection": "AzureEventHubConnectionString",
       "cardinality": "many",
       "consumerGroup": "$Default",
