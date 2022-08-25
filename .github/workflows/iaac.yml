@@ -168,7 +168,8 @@ jobs:
   #       run: echo "${{ steps.meta.outputs.tags }}" | xargs -I {} cosign sign {}@${{ steps.build-and-push.outputs.digest }}
   
   provision:
-    needs: [ build-home-api, build-home-consumer ]
+    # needs: [ build-home-api, build-home-consumer ]
+    needs: build-home-api
     runs-on: ubuntu-latest
 
     steps:
