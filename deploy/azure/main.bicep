@@ -110,12 +110,12 @@ module home 'container_app.bicep' = {
 module iothub_consumer 'container_app.bicep' = {
   name: 'iothub-functions'
   params: {
-    name: 'capp-thermostat-consumer'
+    name: 'capp-home-consumer'
     location: location
     registry: registryName
     registryUsername: registryUserName
     registryPassword: registryPassword
-    repositoryImage: '${registryName}/${registryUserName}/thermostat-consumer:${tag}'
+    repositoryImage: '${registryName}/${registryUserName}/home-consumer:${tag}'
     containerAppEnvironmentId: env.outputs.id
     envVars: iot_consumer_config
     externalIngress: false

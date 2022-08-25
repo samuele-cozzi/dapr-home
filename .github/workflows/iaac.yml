@@ -15,7 +15,7 @@ env:
   # docker variables
   REGISTRY: docker.io
   IMAGE_NAME_API: samuelecozzi/home-api
-  IMAGE_NAME_CONSUMER: samuelecozzi/thermostat-consumer
+  IMAGE_NAME_CONSUMER: samuelecozzi/home-consumer
   
   # alphanumeric string under 14 characters
   RESOURCE_GROUP_NAME: smarthome
@@ -149,7 +149,7 @@ jobs:
         id: build-and-push
         uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
         with:
-          context: ./src/apps/thermostat-consumer
+          context: ./src/apps/home-consumer
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_CONSUMER }}:latest
           labels: ${{ steps.meta.outputs.labels }}
