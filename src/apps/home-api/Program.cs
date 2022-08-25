@@ -52,7 +52,7 @@ app.MapPost("/home", async (HomeState home,IOptions<DaprSettings> daprSettings, 
 app.MapPost("/iothub",  async (object home,IOptions<DaprSettings> daprSettings, ILoggerFactory loggerFactory) =>
 {
     var logger = loggerFactory.CreateLogger("Start");
-    logger.LogInformation(JsonSerializer.Serialize(home));
+    logger.LogWarning(JsonSerializer.Serialize(home));
         
 })
 .WithName("PostIotHome");
