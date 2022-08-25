@@ -46,4 +46,12 @@ app.MapPost("/home", async (HomeState home,IOptions<DaprSettings> daprSettings, 
 })
 .WithName("PostHome");
 
+app.MapPost("/iot", [Topic("iothub","iothub-ehub-iot-smarth-21108025-eb589840ae")]  async (object home,IOptions<DaprSettings> daprSettings, ILoggerFactory loggerFactory) =>
+{
+    var logger = loggerFactory.CreateLogger("Start");
+    logger.LogInformation(JsonSerializer.Serialize(home));
+        
+})
+.WithName("PostIotHome");
+
 app.Run();

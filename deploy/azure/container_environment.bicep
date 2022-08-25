@@ -3,6 +3,7 @@ param location string = resourceGroup().location
 param storageName string
 param storageContainerName string
 param storageKey string
+param iothubconnectionstring string
 
 resource logs 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
   name: 'logs-${baseName}'
@@ -40,7 +41,7 @@ resource env 'Microsoft.App/managedEnvironments@2022-01-01-preview' = {
       }
     }
   }
-  resource daprComponent 'daprComponents@2022-03-01' = {
+  resource daprComponentState 'daprComponents@2022-03-01' = {
     name: 'statestore'
     properties: {
       componentType: 'state.azure.blobstorage'
@@ -64,6 +65,46 @@ resource env 'Microsoft.App/managedEnvironments@2022-01-01-preview' = {
         }
         {
           name: 'accountKey'
+          secretRef: 'storageaccountkey'
+        }
+      ]
+      scopes: [
+        'capp-home-api'
+      ]
+    }
+  }
+  resource daprComponentIotHub 'daprComponents@2022-03-01' = {
+    name: 'iothub'
+    properties: {
+      componentType: 'pubsub.azure.eventhubs'
+      version: 'v1'
+      ignoreErrors: false
+      initTimeout: '5s'
+      secrets: [
+        {
+          name: 'storageaccountkey'
+          value: storageKey
+        }
+        {
+          name: 'iothubconnectionstring'
+          value: iothubconnectionstring
+        }
+      ]
+      metadata: [
+        {
+          name: 'connectionString'
+          value: 'iothubconnectionstring'
+        }
+        {
+          name: 'storageAccountName'
+          value: storageName
+        }
+        {
+          name: 'storageContainerName'
+          value: storageContainerName
+        }
+        {
+          name: 'storageAccountKey'
           secretRef: 'storageaccountkey'
         }
       ]

@@ -50,6 +50,7 @@ module env 'container_environment.bicep' = {
     storageName: storageaccount.outputs.storageName
     storageContainerName: state_storagecontainer.outputs.name
     storageKey: storageaccount.outputs.accountKey
+    iothubconnectionstring: iothub.outputs.connectionstring
   }
 }
 
