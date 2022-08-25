@@ -102,7 +102,7 @@ module home 'container_app.bicep' = {
     repositoryImage: '${registryName}/${registryUserName}/home-api:${tag}'
     containerAppEnvironmentId: env.outputs.id
     envVars: shared_config
-    externalIngress: false
+    externalIngress: true
   }
 }
 
