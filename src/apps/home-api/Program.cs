@@ -74,7 +74,7 @@ app.MapPost("/iothub",  async (HomeIotHub home, IOptions<DaprSettings> daprSetti
     ); 
 
     using( HttpClient client = new HttpClient() ){
-        client.PostAsJsonAsync<HomeState>(daprSettings.Value.PowerBIUrl, stateHome);
+        client.PostAsJsonAsync<List<HomeState>>(daprSettings.Value.PowerBIUrl, new List<HomeState>(){ stateHome });
     }
         
 })
