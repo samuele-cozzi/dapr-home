@@ -9,6 +9,6 @@ resource StorageAccountContainer 'Microsoft.Storage/storageAccounts/blobServices
   properties: {}
 }
 
-output name string = StorageAccountContainer.name
+output name string = containerName
 
 
