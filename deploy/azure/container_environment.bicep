@@ -76,7 +76,7 @@ resource env 'Microsoft.App/managedEnvironments@2022-01-01-preview' = {
   resource daprComponentIotHub 'daprComponents@2022-03-01' = {
     name: 'iothub'
     properties: {
-      componentType: 'pubsub.azure.eventhubs'
+      componentType: 'bindings.azure.eventhubs'
       version: 'v1'
       ignoreErrors: false
       initTimeout: '5s'
@@ -94,6 +94,10 @@ resource env 'Microsoft.App/managedEnvironments@2022-01-01-preview' = {
         {
           name: 'connectionString'
           secretRef: 'iothubconnectionstring'
+        }
+        {
+          name: 'consumerGroup'
+          value: '$Default'
         }
         {
           name: 'storageAccountName'
