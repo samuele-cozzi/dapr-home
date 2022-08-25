@@ -93,7 +93,7 @@ resource env 'Microsoft.App/managedEnvironments@2022-01-01-preview' = {
       metadata: [
         {
           name: 'connectionString'
-          value: 'iothubconnectionstring'
+          secretRef: 'iothubconnectionstring'
         }
         {
           name: 'storageAccountName'

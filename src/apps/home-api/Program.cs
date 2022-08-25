@@ -22,6 +22,9 @@ if (app.Environment.IsDevelopment())
 //app.UseHttpsRedirection();
 app.MapHealthChecks("/");
 app.UseCloudEvents();
+app.MapControllers();
+app.MapSubscribeHandler();
+
 
 app.MapGet("/home", async (IOptions<DaprSettings> daprSettings) =>
 {
