@@ -53,6 +53,16 @@ app.MapPost("/iothub",  async (object home,IOptions<DaprSettings> daprSettings, 
 {
     var logger = loggerFactory.CreateLogger("Start");
     logger.LogWarning(JsonSerializer.Serialize(home));
+
+    var daprClient = new DaprClientBuilder().Build();
+
+    await daprClient.SaveStateAsync<object>(
+        daprSettings.Value.StateStoreName, daprSettings.Value.StateHome, home
+    );   
+
+    await daprClient.SaveStateAsync<object>(
+        daprSettings.Value.StateStoreName, $"history/{DateTime.Now.ToUniversalTime}-{daprSettings.Value.StateHome}", home
+    ); 
         
 })
 .WithName("PostIotHome");
