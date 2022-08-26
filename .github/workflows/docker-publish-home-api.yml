@@ -6,12 +6,8 @@ name: Docker Home API
 # documentation.
 
 on:
-  #schedule:
-  #  - cron: '26 17 * * *'
   push:
     branches: [ "main" ]
-    # Publish semver tags as releases.
-    tags: [ 'v*.*.*' ]
   pull_request:
     branches: [ "main" ]
 
