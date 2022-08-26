@@ -49,32 +49,43 @@ app.MapPost("/home", async (HomeState home,IOptions<DaprSettings> daprSettings, 
 })
 .WithName("PostHome");
 
-app.MapPost("/iothub",  async (HomeIotHub home, IOptions<DaprSettings> daprSettings, ILoggerFactory loggerFactory) =>
+app.MapPost("/iothub",  async (HomeIotHub home, IOptions<DaprSettings> daprSettings, ILoggerFactory loggerFactory, HttpContext context) =>
 {
     var logger = loggerFactory.CreateLogger("Start");
-    logger.LogWarning(JsonSerializer.Serialize(home));
+    logger.LogInformation(JsonSerializer.Serialize(home));
 
     HomeState stateHome = new HomeState()
     {
-        //deviceId = deviceId
+        DeviceId = context.Request.Headers["iothub-connection-device-id"],
         Timestamp = DateTime.Now,
-        HeatIndex = home.heatIndex / home.factor,
-        Humidity = home.humidity / home.factor,
-        Temperature = home.temperature / home.factor,
+        HeatIndex = (double) home.heatIndex / home.factor,
+        Humidity = (double) home.humidity / home.factor,
+        Temperature = (double) home.temperature / home.factor,
     };
 
-    var daprClient = new DaprClientBuilder().Build();
+    logger.LogInformation(JsonSerializer.Serialize(stateHome));
+    
+    try {
+        var daprClient = new DaprClientBuilder().Build();
 
-    await daprClient.SaveStateAsync<HomeState>(
-        daprSettings.Value.StateStoreName, daprSettings.Value.StateHome, stateHome
-    );   
+        await daprClient.SaveStateAsync<HomeState>(
+            daprSettings.Value.StateStoreName, daprSettings.Value.StateHome, stateHome
+        );   
 
-    await daprClient.SaveStateAsync<HomeState>(
-        daprSettings.Value.StateStoreName, $"history/{DateTime.Now.ToUniversalTime()}-{daprSettings.Value.StateHome}", stateHome
-    ); 
+        await daprClient.SaveStateAsync<HomeState>(
+            daprSettings.Value.StateStoreName, 
+            $"history/{DateTime.Now.Year}/{DateTime.Now.Month}/{DateTime.Now.Day}/{DateTime.Now.ToString("HH:mm:ss")}-{daprSettings.Value.StateHome}", 
+            stateHome
+        ); 
+    }
+    catch (Exception e){
+        logger.LogError(e, e.Message);
+    }
+
 
     using( HttpClient client = new HttpClient() ){
-        client.PostAsJsonAsync<List<HomeState>>(daprSettings.Value.PowerBIUrl, new List<HomeState>(){ stateHome });
+        var response = await client.PostAsJsonAsync<List<HomeState>>(daprSettings.Value.PowerBIUrl, new List<HomeState>(){ stateHome });
+        logger.LogInformation($"{response.StatusCode}");
     }
         
 })
