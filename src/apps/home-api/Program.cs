@@ -61,6 +61,13 @@ app.MapPost("/iothub",  async (HomeIotHub home, IOptions<DaprSettings> daprSetti
         HeatIndex = (double) home.heatIndex / home.factor,
         Humidity = (double) home.humidity / home.factor,
         Temperature = (double) home.temperature / home.factor,
+        TargetHeatIndex = home.targetHeatIndex,
+        TargetHumidity = home.targetHumidity,
+        TargetTemperature = home.targetTemperature,
+        acPower = home.acPower,
+        acMode = home.acMode.ToString(),
+        acTemp = home.acTemp,
+        acFan = home.acFan
     };
 
     logger.LogInformation(JsonSerializer.Serialize(stateHome));
