@@ -7,10 +7,10 @@ public class HomeState {
     public double Humidity { get; set; }
     public double HeatIndex { get; set; }
 
-    public bool acPower { get; set; }
-    public double acTemp { get; set; }
-    public string acMode { get; set; }
-    public int acFan { get; set; }
+    public bool ACPower { get; set; }
+    public double ACTemp { get; set; }
+    public string ACMode { get; set; }
+    public int ACFan { get; set; }
     public int TargetHumidity { get; set; }
     public int TargetTemperature { get; set; }
     public int TargetHeatIndex { get; set; }
