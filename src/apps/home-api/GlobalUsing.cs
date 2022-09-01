@@ -19,3 +19,5 @@ global using Dapr.Client;
 
 global using home.api.models;
 global using home.api.config;
+global using home.api.services;
+global using home.api.services.interfaces;

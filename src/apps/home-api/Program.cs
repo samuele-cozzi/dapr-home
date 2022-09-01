@@ -10,6 +10,10 @@ builder.Services.AddControllers().AddDapr();
 
 builder.Services.Configure<DaprSettings>(builder.Configuration.GetSection(nameof(DaprSettings)));
 
+builder.Services.AddScoped<IConfigurationService, ConfigurationService>();
+builder.Services.AddScoped<IAnalysisService, AnalysisService>();
+builder.Services.AddScoped<IHomeService, HomeServices>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -26,75 +30,37 @@ app.MapControllers();
 app.MapSubscribeHandler();
 
 
-app.MapGet("/home", async (IOptions<DaprSettings> daprSettings) =>
+app.MapGet("/home", async (IOptions<DaprSettings> daprSettings, IHomeService service) =>
 {
-    var daprClient = new DaprClientBuilder().Build();
-    var result = await daprClient.GetStateAsync<HomeState>(
-        daprSettings.Value.StateStoreName, daprSettings.Value.StateHome
-    );
-    return result;
+    return service.Get();
 })
 .WithName("GetHome");
 
-app.MapPost("/home", async (HomeState home,IOptions<DaprSettings> daprSettings, ILoggerFactory loggerFactory) =>
+app.MapPost("/thermostat", async (Thermostat thermostat, IHomeService service) =>
 {
-    var logger = loggerFactory.CreateLogger("Start");
-    logger.LogInformation(JsonSerializer.Serialize(home));
-
-    var daprClient = new DaprClientBuilder().Build();
-
-    await daprClient.SaveStateAsync<HomeState>(
-        daprSettings.Value.StateStoreName, daprSettings.Value.StateHome, home
-    );     
+    service.SaveThermostat(thermostat);
 })
-.WithName("PostHome");
+.WithName("PostThermostat");
 
-app.MapPost("/iothub",  async (HomeIotHub home, IOptions<DaprSettings> daprSettings, ILoggerFactory loggerFactory, HttpContext context) =>
+app.MapPost("/airConditioner", async (AirConditioner airConditioner, IHomeService service) =>
 {
-    var logger = loggerFactory.CreateLogger("Start");
-    logger.LogInformation(JsonSerializer.Serialize(home));
+    service.SaveAirConditioner(airConditioner);
+})
+.WithName("PostAirConditioner");
 
-    HomeState stateHome = new HomeState()
-    {
-        DeviceId = context.Request.Headers["iothub-connection-device-id"],
-        Timestamp = DateTime.Now,
-        HeatIndex = (double) home.heatIndex / home.factor,
-        Humidity = (double) home.humidity / home.factor,
-        Temperature = (double) home.temperature / home.factor,
-        TargetHeatIndex = home.targetHeatIndex,
-        TargetHumidity = home.targetHumidity,
-        TargetTemperature = home.targetTemperature,
-        ACPower = home.acPower,
-        ACMode = home.acMode.ToString(),
-        ACTemp = home.acTemp,
-        ACFan = home.acFan
-    };
-
-    logger.LogInformation(JsonSerializer.Serialize(stateHome));
+app.MapPost("/iothub",  async (HomeIotHub iot, HttpContext context, IHomeService service, IAnalysisService aservice) =>
+{
+    service.SaveThermostat(new Thermostat(){
+        deviceId = context.Request.Headers["iothub-connection-device-id"],
+        temperature = (double) iot.temperature / iot.factor,
+        humidity = (double) iot.humidity / iot.factor,
+        heatIndex = (double) iot.heatIndex / iot.factor
+    });
     
-    try {
-        var daprClient = new DaprClientBuilder().Build();
+    var home = await service.Get();
 
-        await daprClient.SaveStateAsync<HomeState>(
-            daprSettings.Value.StateStoreName, daprSettings.Value.StateHome, stateHome
-        );   
-
-        await daprClient.SaveStateAsync<HomeState>(
-            daprSettings.Value.StateStoreName, 
-            $"history/{DateTime.Now.Year}/{DateTime.Now.Month}/{DateTime.Now.Day}/{DateTime.Now.ToString("HH:mm:ss")}-{daprSettings.Value.StateHome}", 
-            stateHome
-        ); 
-    }
-    catch (Exception e){
-        logger.LogError(e, e.Message);
-    }
-
-
-    using( HttpClient client = new HttpClient() ){
-        var response = await client.PostAsJsonAsync<List<HomeState>>(daprSettings.Value.PowerBIUrl, new List<HomeState>(){ stateHome });
-        logger.LogInformation($"{response.StatusCode}");
-    }
-        
+    service.SaveArchive(home);
+    aservice.Save(home);        
 })
 .WithName("PostIotHome");
 
