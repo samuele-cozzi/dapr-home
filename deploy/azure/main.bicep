@@ -102,7 +102,22 @@ module home 'container_app.bicep' = {
     repositoryImage: '${registryName}/${registryUserName}/home-api:${tag}'
     containerAppEnvironmentId: env.outputs.id
     envVars: shared_config
-    externalIngress: false
+    externalIngress: true
   }
 }
 
+// create the home api container app
+module ac_controller 'container_app.bicep' = {
+  name: 'ui-ac-controller'
+  params: {
+    name: 'ui-ac-controller'
+    location: location
+    registry: registryName
+    registryUsername: registryUserName
+    registryPassword: registryPassword
+    repositoryImage: '${registryName}/${registryUserName}/ui-ac-controller:${tag}'
+    containerAppEnvironmentId: env.outputs.id
+    envVars: shared_config
+    externalIngress: true
+  }
+}
