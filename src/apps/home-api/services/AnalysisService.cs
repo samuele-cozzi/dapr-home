@@ -19,7 +19,7 @@ public class AnalysisService : IAnalysisService{
         List<string> devices = new List<string>();
         foreach (var room in home.Configuration.Rooms){
             foreach (var device in room.Devices){
-                if (devices.Contains(device.Id)) devices.Add(device.Id);
+                if (!devices.Contains(device.Id)) devices.Add(device.Id);
             }
         }
 

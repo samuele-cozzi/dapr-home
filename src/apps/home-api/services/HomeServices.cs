@@ -24,13 +24,18 @@ public class HomeServices: IHomeService {
 
         foreach (var room in configuration.Rooms){
             foreach (var device in room.Devices){
-                var airConditioner = await client.GetStateAsync<AirConditioner>(
-                    settings.Value.StateStoreName, $"{settings.Value.StateAirConditioner}/{device.Id}");
-                if(airConditioner != null) home.AirConditioners.Add(airConditioner);
+                if(home.AirConditioners.Count(x => x.DeviceId == device.Id) == 0) {
+                    var airConditioner = await client.GetStateAsync<AirConditioner>(
+                        settings.Value.StateStoreName, $"{settings.Value.StateAirConditioner}/{device.Id}");
+                    if(airConditioner != null) home.AirConditioners.Add(airConditioner);
+                }
 
-                var thermostat = await client.GetStateAsync<Thermostat>(
-                    settings.Value.StateStoreName, $"{settings.Value.StateThermostat}/{device.Id}");
-                if(thermostat != null) home.Thermostats.Add(thermostat);
+                if (home.Thermostats.Count(x => x.deviceId == device.Id) == 0) {
+                    var thermostat = await client.GetStateAsync<Thermostat>(
+                        settings.Value.StateStoreName, $"{settings.Value.StateThermostat}/{device.Id}");
+                    if(thermostat != null) home.Thermostats.Add(thermostat);
+                }
+                
             }
         }
 
