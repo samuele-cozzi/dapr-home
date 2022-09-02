@@ -36,6 +36,12 @@ app.MapGet("/home", async (IOptions<DaprSettings> daprSettings, IHomeService ser
 })
 .WithName("GetHome");
 
+app.MapPost("/configuration", async (HomeConfiguration conf, IConfigurationService service) =>
+{
+    service.Save(conf);
+})
+.WithName("PostConfiguration");
+
 app.MapPost("/thermostat", async (Thermostat thermostat, IHomeService service) =>
 {
     service.SaveThermostat(thermostat);
