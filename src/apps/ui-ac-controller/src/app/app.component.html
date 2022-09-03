@@ -1,9 +1,16 @@
 <p>
   <mat-toolbar>
     <span>AC Controller</span>
+
+    <span class="example-spacer"></span>
+
+    <a routerLink="/configuration">
+      <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+        <mat-icon>settings</mat-icon>
+      </button>
+    </a>
   </mat-toolbar>
 </p>
 
 <router-outlet></router-outlet>
 
-<app-ac-controller></app-ac-controller>
