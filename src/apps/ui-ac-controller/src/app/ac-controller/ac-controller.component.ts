@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HomeApiService } from '../home-api.service';
 
 @Component({
   selector: 'app-ac-controller',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AcControllerComponent implements OnInit {
 
-  constructor() { }
+  constructor(private homeService: HomeApiService) { }
 
   ngOnInit(): void {
+    this.homeService.get();
   }
 
 }
